@@ -1,4 +1,4 @@
-#[SMF Diagnostics Center](http://github.com/jasonclemons/SMF-Diagnostics-Center)
+#[SMF Diagnostic Center](http://github.com/jasonclemons/SMF-Diagnostic-Center)
 ###Simple diagnostics center to help aid in debugging problems in SMF
 
 Created by [Jason Clemons](http://github.com/jasonclemons)
@@ -7,9 +7,10 @@ Created by [Jason Clemons](http://github.com/jasonclemons)
 All SMF Diagnostics Center source files are licensed under the [MIT License](http://opensource.org/licenses/mit-license.html)
 
 ##Getting Started
-1. [Download](https://github.com/jasonclemons/SMF-Diagnostics-Center/archive/develop.zip) the package. 
-2. Install it using SMF's built-in [Package Manager](http://wiki.simplemachines.org/smf/Package_manager).
-3. It's as simple as that!
+1. [Download](https://github.com/jasonclemons/SMF-Diagnostics-Center/archive/master.zip) the package. 
+2. Create a `.tar` or `.zip` archive of the included source. (Sorry, I'm too lazy to create builds at the moment...)
+3. Install it using SMF's built-in [Package Manager](http://wiki.simplemachines.org/smf/Package_manager).
+4. It's as simple as that!
 
 ##Using It
 SMF Diagnostics Center is meant to be used for debugging and support purposes. It provides information that could be critical to determining where a problem may lie.
