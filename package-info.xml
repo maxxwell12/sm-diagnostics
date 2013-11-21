@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+
+	<name>SMF Diagnostics Center</name>
+	<id>JBlaze:SMF-Diagnostics-Center</id>
+	<version>1.0</version>
+	<type>modification</type>
+
+	<!-- !! Installs !! -->
+	<install for="2.0 - 2.0.99">
+		<readme parsebbc="true">readme.txt</readme>
+		<modification>install.xml</modification>
+		<require-file name="source/ManageDiagnostics.php" destination="$sourcedir" />
+		<require-file name="source/Subs-ManageDiagnostics.php" destination="$sourcedir" />
+		<require-file name="templates/ManageDiagnostics.template.php" destination="$themedir" />
+		<require-file name="languages/ManageDiagnostics.english.php" destination="$languagedir" />
+	</install>
+
+	<!-- !! Uninstalls !! -->
+	<uninstall for="2.0 - 2.0.99">
+		<readme parsebbc="true">readme.txt</readme>
+		<modification>uninstall.xml</modification>
+		<remove-file name="$sourcedir/ManageDiagnostics.php" />
+		<remove-file name="$sourcedir/Subs-ManageDiagnostics.php" />
+		<remove-file name="$themedir/ManageDiagnostics.template.php" />
+		<remove-file name="$languagedir/ManageDiagnostics.english.php" />
+	</uninstall>
+
+</package-info>
