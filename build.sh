@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 
-base=${PWD}
-release=/tmp/sm-diagnostics-release
+version=0.1.0
+filename=sm_diagnostics_v${version}.zip
+release=/tmp/release
 
 rm -rf ${release}
 mkdir ${release}
 
-git archive --format zip --worktree-attributes HEAD > ${release}/release.zip
+git archive --format zip --worktree-attributes HEAD > ${release}/${filename}
 
 cd ${release}
-unzip release.zip -d ./
-rm release.zip
+unzip ${filename} -d ./
+rm ${filename}.zip
 
 # Delete files
 rm -rf ${release}/build.sh
@@ -22,4 +23,4 @@ cd ${release}
 find . -type d -exec chmod 0750 {} +
 find . -type f -exec chmod 0644 {} +
 chmod 0775 .
-zip -r release.zip ./
+zip -r ${filename} ./
