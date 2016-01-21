@@ -35,4 +35,4 @@ To use the diagnostics center, look under the `Maintenance` tab in your Admin da
 
 ## Support
 
-Support for SM Diagnostics will be offered through [Flarum.co](http://flarum.co). All bug reports must be submitted to the [GitHub Repository](https://github.com/forum/sm-diagnostics).
+Support for SM Diagnostics will be offered through [my personal forum](https://jasonclemons.me/forum/). All bug reports must be submitted to the [GitHub Repository](https://github.com/forum/sm-diagnostics).
