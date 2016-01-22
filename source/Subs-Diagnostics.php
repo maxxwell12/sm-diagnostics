@@ -1,13 +1,13 @@
 <?php
 /**
- * Simple Machines Forum (SMF)
+ * SM Diagnostics
  *
- * @package SMF
- * @author Simple Machines
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
+ * @package forum/sm-diagnostics
+ * @author Jason Clemons <jason@simplemachines.org>
+ * @copyright 2016 Jason Clemons
+ * @license MIT
  *
- * @version 2.0
+ * @version 0.1.0
  */
 
 if (!defined('SMF'))
@@ -16,19 +16,19 @@ if (!defined('SMF'))
 /*	This file contains functions necessary to complete certain tasks
 	within the SMF Diagnostics Center application.
 
-	void getSqlVersion()
+	string getSqlVersion()
 		- get the current version of MySQL/SQLite/PostgreSQL running
 		  on this server.
 
-	void getServerLoad()
+	string getServerLoad()
 		- get the current CPU load percentage.
 
-	void whitespaceDirRecurse(string dir)
+	string whitespaceDirRecurse(string dir)
 		- recurse through a given directory and check it for unneeded
 		  whitespace.
-
 		- return the path of the file if whitespace is found.
 
+	
 */
 
 function getSqlVersion()
@@ -118,56 +118,111 @@ function whitespaceDirRecurse($dir)
 
 	$files = array();
 
-	try
+	foreach (new DirectoryIterator($dir) as $directory)
 	{
-		foreach (new DirectoryIterator($dir) as $directory)
+		if ($directory->isDot())
 		{
-			if ($directory->isDot())
-			{
-				continue;
-			}
+			continue;
+		}
 
-			if (strpos($directory->getFilename(), '_') === 0 or strpos($directory->getFilename(), '.') === 0)
-			{
-				continue;
-			}
+		if (strpos($directory->getFilename(), '_') === 0 or strpos($directory->getFilename(), '.') === 0)
+		{
+			continue;
+		}
 
-			$newpath = $dir . '/' . $directory->getFilename();
-			$level   = explode('/', $newpath);
+		$newpath = $dir . '/' . $directory->getFilename();
+		$level   = explode('/', $newpath);
 
-			if (is_dir($newpath) && !in_array($directory->getFilename(), $skip_dirs))
+		if (is_dir($newpath) && !in_array($directory->getFilename(), $skip_dirs))
+		{
+			$files = array_merge($files, whitespaceDirRecurse($newpath));
+		}
+		else
+		{
+			if (strpos($directory->getFilename(), '.php') !== false && !is_dir($newpath))
 			{
-				$files = array_merge($files, whitespaceDirRecurse($newpath));
-			}
-			else
-			{
-				if (strpos($directory->getFilename(), '.php') !== false && !is_dir($newpath))
+				$file           = file_get_contents($newpath);
+				$has_whitespace = false;
+
+				if (substr(ltrim($file), 0, 3) == '<?php' and substr($file, 0, 3) == '<?php')
 				{
-					$file           = file_get_contents($newpath);
-					$has_whitespace = false;
-
-					if (substr(ltrim($file), 0, 3) == '<?php' and substr($file, 0, 3) == '<?php')
+					$has_whitespace = true;
+				}
+				else if (substr(rtrim($file), -2) == '?>' and substr($file, -2) != '?>')
+				{
+					if (substr(rtrim($file), -2) == '?>' and substr($file, -3) != "?>\n")
 					{
 						$has_whitespace = true;
 					}
-					else if (substr(rtrim($file), -2) == '?>' and substr($file, -2) != '?>')
-					{
-						if (substr(rtrim($file), -2) == '?>' and substr($file, -3) != "?>\n")
-						{
-							$has_whitespace = true;
-						}
-					}
+				}
 
-					if ($has_whitespace)
-					{
-						$files[] = $newpath;
-					}
+				if ($has_whitespace)
+				{
+					$files[] = $newpath;
 				}
 			}
 		}
-	} catch (Exception $e) {}
+	}
 
 	return $files;
+}
+
+/**
+ * !!! http://stackoverflow.com/a/18781630/5225980
+ *
+ * @param &$array array
+ * @param $position int
+ * @param $insert array
+ * @return void
+ */
+function array_insert(&$array, $position, $insert)
+{
+	if (is_int($position))
+	{
+		array_splice($array, $position, 0, $insert);
+	}
+	else
+	{
+		$pos	= array_search($position, array_keys($array));
+		$array	= array_merge(
+			array_slice($array, 0, $pos),
+			$insert,
+			array_slice($array, $pos)
+		);
+	}
+}
+
+/**
+ * Create the admin menu hook
+ *
+ * @param &$menu_buttons array
+ * @return void
+ */
+function hookAdminMenu(&$menu_buttons)
+{
+	global $scripturl, $txt;
+
+	// Call this here... it only makes sense
+	loadLanguage('Diagnostics');
+
+	$button = array(
+		'diagnostics' => array(
+			'label' => $txt['diagnostics_title'],
+			'file' => 'ManageDiagnostics.php',
+			'icon' => 'support.gif',
+			'function' => 'ManageDiagnostics',
+			'subsections' => array(
+				'overview' => array($txt['diagnostics_sub_overview'], 'admin_forum'),
+				'phpinfo' => array($txt['diagnostics_sub_phpinfo'], 'admin_forum'),
+				'whitespace' => array($txt['diagnostics_sub_whitespace'], 'admin_forum'),
+				'permissions' => array($txt['diagnostics_sub_permissions'], 'admin_forum'),
+				'connection' => array($txt['diagnostics_sub_connection'], 'admin_forum'),
+				'email' => array($txt['diagnostics_sub_email'], 'admin_forum')
+			),
+		),
+	);
+
+	array_insert($menu_buttons['maintenance']['areas'], 1, $button);
 }
 
 ?>

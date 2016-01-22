@@ -1,13 +1,13 @@
 <?php
 /**
- * Simple Machines Forum (SMF)
+ * SM Diagnostics
  *
- * @package SMF
- * @author Simple Machines
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
+ * @package forum/sm-diagnostics
+ * @author Jason Clemons <jason@simplemachines.org>
+ * @copyright 2016 Jason Clemons
+ * @license MIT
  *
- * @version 2.0
+ * @version 0.1.0
  */
 
 function ManageDiagnostics()
@@ -18,8 +18,8 @@ function ManageDiagnostics()
 	isAllowedTo('admin_forum');
 
 	// Load the templates and languages
-	loadTemplate('ManageDiagnostics');
-	loadLanguage('ManageDiagnostics');
+	loadTemplate('Diagnostics');
+	loadLanguage('Diagnostics');
 
 	// We need our helper functions
 	require_once($sourcedir . '/Subs-Diagnostics.php');

@@ -1,5 +1,5 @@
 <?php
-// Version: 2.0; ManageDiagnostics
+// Version: 2.0; Diagnostics
 
 // Main Admin Tab strings
 $txt['diagnostics_title'] = 'System Diagnostics';

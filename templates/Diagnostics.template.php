@@ -1,13 +1,13 @@
 <?php
 /**
- * Simple Machines Forum (SMF)
+ * SM Diagnostics
  *
- * @package SMF
- * @author Simple Machines
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
+ * @package forum/sm-diagnostics
+ * @author Jason Clemons <jason@simplemachines.org>
+ * @copyright 2016 Jason Clemons
+ * @license MIT
  *
- * @version 2.0
+ * @version 0.1.0
  */
 
  function template_diagnostic_overview()

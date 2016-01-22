@@ -9,8 +9,8 @@
 
 	<!-- !! Installs !! -->
 	<install for="2.0 - 2.0.99">
-		<readme parsebbc="true">readme.txt</readme>
-		<modification>install.xml</modification>
+		<readme>README.md</readme>
+		<code>hooks.php</code>
 		<require-file name="source/ManageDiagnostics.php" destination="$sourcedir" />
 		<require-file name="source/Subs-ManageDiagnostics.php" destination="$sourcedir" />
 		<require-file name="templates/ManageDiagnostics.template.php" destination="$themedir" />
@@ -19,8 +19,8 @@
 
 	<!-- !! Uninstalls !! -->
 	<uninstall for="2.0 - 2.0.99">
-		<readme parsebbc="true">readme.txt</readme>
-		<modification>uninstall.xml</modification>
+		<readme>README.md</readme>
+		<code>hooks.php</code>
 		<remove-file name="$sourcedir/ManageDiagnostics.php" />
 		<remove-file name="$sourcedir/Subs-ManageDiagnostics.php" />
 		<remove-file name="$themedir/ManageDiagnostics.template.php" />
