@@ -168,45 +168,23 @@ function whitespaceDirRecurse($dir)
 }
 
 /**
- * !!! http://stackoverflow.com/a/18781630/5225980
- *
- * @param &$array array
- * @param $position int
- * @param $insert array
- * @return void
- */
-function array_insert(&$array, $position, $insert)
-{
-	if (is_int($position))
-	{
-		array_splice($array, $position, 0, $insert);
-	}
-	else
-	{
-		$pos	= array_search($position, array_keys($array));
-		$array	= array_merge(
-			array_slice($array, 0, $pos),
-			$insert,
-			array_slice($array, $pos)
-		);
-	}
-}
-
-/**
  * Create the admin menu hook
  *
  * @param &$menu_buttons array
  * @return void
  */
-function hookAdminMenu(&$menu_buttons)
+function hookAdminMenu(&$admin_areas)
 {
-	global $scripturl, $txt;
+	global $txt;
 
 	// Call this here... it only makes sense
 	loadLanguage('Diagnostics');
 
-	$button = array(
-		'diagnostics' => array(
+	$counter	= array_search('maintenance', array_keys($admin_area)) + 1;
+	$admin_area = $admin_areas['maintenance']['areas'];
+
+	$admin_areas['maintenance']['areas'] = array_merge(
+		array_slice($admin_area, 0, $counter, true), array('diagnostics' => array(
 			'label' => $txt['diagnostics_title'],
 			'file' => 'ManageDiagnostics.php',
 			'icon' => 'support.gif',
@@ -219,10 +197,8 @@ function hookAdminMenu(&$menu_buttons)
 				'connection' => array($txt['diagnostics_sub_connection'], 'admin_forum'),
 				'email' => array($txt['diagnostics_sub_email'], 'admin_forum')
 			),
-		),
+		)), array_slice($admin_area, $counter, count($admin_area), true)
 	);
-
-	array_insert($menu_buttons['maintenance']['areas'], 1, $button);
 }
 
 ?>

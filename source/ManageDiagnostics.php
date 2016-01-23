@@ -19,7 +19,6 @@ function ManageDiagnostics()
 
 	// Load the templates and languages
 	loadTemplate('Diagnostics');
-	loadLanguage('Diagnostics');
 
 	// We need our helper functions
 	require_once($sourcedir . '/Subs-Diagnostics.php');
@@ -27,7 +26,15 @@ function ManageDiagnostics()
 	// Let's use some admin tabs...
 	$context[$context['admin_menu_name']]['tab_data'] = array(
 		'title'       => $txt['diagnostics_title'],
-		'description' => $txt['diagnostics_info']
+		'description' => $txt['diagnostics_info'],
+		'tabs' => array(
+			'overview' => array(),
+			'phpinfo' => array(),
+			'whitespace' => array(),
+			'permissions' => array(),
+			'connection' => array(),
+			'email' => array(),
+		),
 	);
 
 	// Time for some sub actions.
