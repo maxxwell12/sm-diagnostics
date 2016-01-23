@@ -20,9 +20,14 @@ elseif (!defined('SMF'))
 
 // Define the hooks
 $hook_functions = array(
-	'integrate_admin_menu_buttons' => 'hookAdminMenu'
+	'integrate_admin_include' => 'Sources/Subs-Diagnostics.php',
+	'integrate_admin_areas' => 'hookAdminMenu'
 );
 
 // Do the deed
-foreach ($hook_functions as $hook => $function)
-	add_integration_function($hook, $function);
+foreach ($hook_functions as $hook => $function) {
+	if ($context['uninstalling'])
+		remove_integration_function($hook, $function);
+	else
+		add_integration_function($hook, $function);
+}

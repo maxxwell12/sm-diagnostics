@@ -11,7 +11,7 @@ git archive --format zip --worktree-attributes HEAD > ${release}/${filename}
 
 cd ${release}
 unzip ${filename} -d ./
-rm ${filename}.zip
+rm ${filename}
 
 # Delete files
 rm -rf ${release}/build.sh

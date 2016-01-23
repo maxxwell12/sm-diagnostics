@@ -12,9 +12,9 @@
 		<readme>README.md</readme>
 		<code>hooks.php</code>
 		<require-file name="source/ManageDiagnostics.php" destination="$sourcedir" />
-		<require-file name="source/Subs-ManageDiagnostics.php" destination="$sourcedir" />
-		<require-file name="templates/ManageDiagnostics.template.php" destination="$themedir" />
-		<require-file name="languages/ManageDiagnostics.english.php" destination="$languagedir" />
+		<require-file name="source/Subs-Diagnostics.php" destination="$sourcedir" />
+		<require-file name="templates/Diagnostics.template.php" destination="$themedir" />
+		<require-file name="languages/Diagnostics.english.php" destination="$languagedir" />
 	</install>
 
 	<!-- !! Uninstalls !! -->
@@ -22,9 +22,9 @@
 		<readme>README.md</readme>
 		<code>hooks.php</code>
 		<remove-file name="$sourcedir/ManageDiagnostics.php" />
-		<remove-file name="$sourcedir/Subs-ManageDiagnostics.php" />
-		<remove-file name="$themedir/ManageDiagnostics.template.php" />
-		<remove-file name="$languagedir/ManageDiagnostics.english.php" />
+		<remove-file name="$sourcedir/Subs-Diagnostics.php" />
+		<remove-file name="$themedir/Diagnostics.template.php" />
+		<remove-file name="$languagedir/Diagnostics.english.php" />
 	</uninstall>
 
 </package-info>
