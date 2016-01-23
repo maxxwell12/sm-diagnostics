@@ -11,7 +11,7 @@
  */
 
 if (!defined('SMF'))
-	die('Hacking attempt...');
+	die('No direct access...');
 
 /*	This file contains functions necessary to complete certain tasks
 	within the SMF Diagnostics Center application.
@@ -44,8 +44,7 @@ function getSqlVersion()
 		$result[] = $row[0];
 	$smcFunc['db_free_result']($query);
 
-	if (!$result)
-	{
+	if (!$result) {
 		$query = $smcFunc['db_query']('', '
 			SHOW VARIABLES LIKE \'version\'',
 			array()
@@ -58,9 +57,7 @@ function getSqlVersion()
 		$tmp          = explode('.', preg_replace('#[^\d\.]#', '\\1', $row[0]));
 
 		$sql_version  = sprintf('%d%02d%02d', $tmp[0], $tmp[1], $tmp[2]);
-	}
-	else
-	{
+	} else {
 		$sql_version = $result[0];
 	}
 
@@ -70,10 +67,8 @@ function getSqlVersion()
 function getServerLoad()
 {
 	# @ suppressor stops warning in > 4.3.2 with open_basedir restrictions
-	if (@file_exists('/proc/loadavg'))
-	{
-		if ($fh = @fopen('/proc/loadavg', 'r'))
-		{
+	if (@file_exists('/proc/loadavg')) {
+		if ($fh = @fopen('/proc/loadavg', 'r')) {
 			$data = @fread($fh, 6);
 
 			@fclose($fh);
@@ -81,9 +76,7 @@ function getServerLoad()
 			$load_avg   = explode(' ', $data);
 			$load_limit = trim($load_avg[0]);
 		}
-	}
-	else if (strpos(strtolower(PHP_OS), 'win') === 0)
-	{
+	} else if (strpos(strtolower(PHP_OS), 'win') === 0) {
 		$serverstats = @shell_exec('typeperf "Processor(_Total)\% Processor Time" -sc 1');
 
 		if ($serverstats)
@@ -93,11 +86,8 @@ function getServerLoad()
 			$statline     = explode(',', str_replace('"', '', $serverstats[0]));
 			$load_limit   = round($statline[1], 4);
 		}
-	}
-	else
-	{
-		if ($serverstats = @exec('uptime'))
-		{
+	} else {
+		if ($serverstats = @exec('uptime')) {
 			preg_match('/(?:averages)?\: ([0-9\.]+)(,|)[\s]+([0-9\.]+)(,|)[\s]+([0-9\.]+)/', $serverstats, $load);
 
 			$load_limit = $load[1];
@@ -118,46 +108,34 @@ function whitespaceDirRecurse($dir)
 
 	$files = array();
 
-	foreach (new DirectoryIterator($dir) as $directory)
-	{
-		if ($directory->isDot())
-		{
+	foreach (new DirectoryIterator($dir) as $directory) {
+		if ($directory->isDot()) {
 			continue;
 		}
 
-		if (strpos($directory->getFilename(), '_') === 0 or strpos($directory->getFilename(), '.') === 0)
-		{
+		if (strpos($directory->getFilename(), '_') === 0 or strpos($directory->getFilename(), '.') === 0) {
 			continue;
 		}
 
 		$newpath = $dir . '/' . $directory->getFilename();
 		$level   = explode('/', $newpath);
 
-		if (is_dir($newpath) && !in_array($directory->getFilename(), $skip_dirs))
-		{
+		if (is_dir($newpath) && !in_array($directory->getFilename(), $skip_dirs)) {
 			$files = array_merge($files, whitespaceDirRecurse($newpath));
-		}
-		else
-		{
-			if (strpos($directory->getFilename(), '.php') !== false && !is_dir($newpath))
-			{
+		} else {
+			if (strpos($directory->getFilename(), '.php') !== false && !is_dir($newpath)) {
 				$file           = file_get_contents($newpath);
 				$has_whitespace = false;
 
-				if (substr(ltrim($file), 0, 3) == '<?php' and substr($file, 0, 3) == '<?php')
-				{
+				if (substr(ltrim($file), 0, 3) == '<?php' and substr($file, 0, 3) == '<?php') {
 					$has_whitespace = true;
-				}
-				else if (substr(rtrim($file), -2) == '?>' and substr($file, -2) != '?>')
-				{
-					if (substr(rtrim($file), -2) == '?>' and substr($file, -3) != "?>\n")
-					{
+				} else if (substr(rtrim($file), -2) == '?>' and substr($file, -2) != '?>') {
+					if (substr(rtrim($file), -2) == '?>' and substr($file, -3) != "?>\n") {
 						$has_whitespace = true;
 					}
 				}
 
-				if ($has_whitespace)
-				{
+				if ($has_whitespace) {
 					$files[] = $newpath;
 				}
 			}

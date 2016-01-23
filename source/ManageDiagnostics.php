@@ -10,18 +10,15 @@
  * @version 0.1.0
  */
 
+if (!defined('SMF'))
+	die('No direct access...');
+
 function ManageDiagnostics()
 {
 	global $txt, $sourcedir, $context;
 
-	// Gotta be an Admin to even think about being here!
 	isAllowedTo('admin_forum');
-
-	// Load the templates and languages
 	loadTemplate('Diagnostics');
-
-	// We need our helper functions
-	require_once($sourcedir . '/Subs-Diagnostics.php');
 
 	// Let's use some admin tabs...
 	$context[$context['admin_menu_name']]['tab_data'] = array(
@@ -77,18 +74,14 @@ function ManageDiagnostics()
 	);
 
 	// Yep, sub-action time!
-	if (isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']]))
-	{
+	if (isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']])) {
 		$subAction = $_REQUEST['sa'];
-	}
-	else
-	{
+	} else {
 		$subAction = 'overview';
 	}
 
 	// Doing something special?
-	if (isset($_REQUEST['activity']) && isset($subActions[$subAction]['activities'][$_REQUEST['activity']]))
-	{
+	if (isset($_REQUEST['activity']) && isset($subActions[$subAction]['activities'][$_REQUEST['activity']])) {
 		$activity = $_REQUEST['activity'];
 	}
 
@@ -101,8 +94,7 @@ function ManageDiagnostics()
 	$subActions[$subAction]['function']();
 
 	// Any special activity?
-	if (isset($activity))
-	{
+	if (isset($activity)) {
 		$subActions[$subAction]['activities'][$activity]();
 	}
 }
@@ -121,27 +113,19 @@ function DiagnosticOverview()
 	$_disabled         = @ini_get('disable_functions') ? explode(',', @ini_get('disable_functions')) : array();
 	$_shellExecAvail   = in_array('shell_exec', $_disabled) ? false : true;
 
-	// Check Memory
-	if (strpos(strtolower(PHP_OS), 'win') === 0)
-	{
-		// Make sure we have shell access
+	if (strpos(strtolower(PHP_OS), 'win') === 0) {
 		$mem = $_shellExecAvail ? @shell_exec('systeminfo') : null;
 
-		if ($mem)
-		{
+		if ($mem) {
 			$server_reply = explode("\n", str_replace("\r", '', $mem));
 
-			if (count($server_reply))
-			{
-				foreach ($server_reply as $info)
-				{
-					if (strstr($info, $txt['diagnostics_totalmem']))
-					{
+			if (count($server_reply)) {
+				foreach ($server_reply as $info) {
+					if (strstr($info, $txt['diagnostics_totalmem'])) {
 						$total_memory = trim(str_replace(':', '', strrchr($info, ':')));
 					}
 
-					if (strstr($info, $txt['diagnostics_availmem']))
-					{
+					if (strstr($info, $txt['diagnostics_availmem'])) {
 						$avail_memory = trim(str_replace(':', '', strrchr($info, ':')));
 					}
 				}
@@ -150,20 +134,16 @@ function DiagnosticOverview()
 	}
 	else
 	{
-		// Again, no shell, no tell
 		$mem = $_shellExecAvail ? @shell_exec('free -m') : null;
 
-		if ($mem)
-		{
+		if ($mem) {
 			$server_reply = explode("\n", str_replace("\r", '', $mem));
 			$mem          = array_slice($server_reply, 1, 1);
 			$mem          = preg_split('#\s+#', $mem[0]);
 
 			$total_memory = ($mem[1]) ? $mem[1] . ' MB' : '--';
 			$avail_memory = ($mem[3]) ? $mem[3] . ' MB' : '--';
-		}
-		else
-		{
+		} else {
 			$total_memory = '--';
 			$avail_memory = '--';
 		}
@@ -190,35 +170,24 @@ function DiagnosticOverview()
 		'avail_memory'  => $avail_memory
 	);
 
-	if ($_shellExecAvail)
-	{
-		if (strpos(strtolower(PHP_OS), 'win') === 0)
-		{
+	if ($_shellExecAvail) {
+		if (strpos(strtolower(PHP_OS), 'win') === 0) {
 			$tasks = @shell_exec('tasklist');
 			$tasks = str_replace(' ', '&nbsp;', $tasks);
-		}
-		else if (strtolower(PHP_OS) == 'darwin')
-		{
+		} else if (strtolower(PHP_OS) == 'darwin') {
 			$tasks = @shell_exec('top -1 1');
 			$tasks = str_replace(' ', '&nbsp;', $tasks);
-		}
-		else
-		{
+		} else {
 			$tasks = @shell_exec('top -b -n 1');
 			$tasks = str_replace(' ', '&nbsp;', $tasks);
 		}
-	}
-	else
-	{
+	} else {
 		$tasks = '';
 	}
 
-	if (!$tasks)
-	{
+	if (!$tasks) {
 		$tasks = $txt['diagnostics_unable'];
-	}
-	else
-	{
+	} else {
 		$tasks = '<pre>' . $tasks . '</pre>';
 	}
 

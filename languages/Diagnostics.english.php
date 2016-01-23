@@ -32,6 +32,6 @@ $txt['diagnostics_unable'] = '<em>Unable to obtain process information.</em>';
 
 // Whitespace Check strings
 $txt['diagnostics_whitespace_found'] = 'has whitespace at the beginning or end of the file';
-$txt['diagnostics_whitespace_notfound'] = 'All scanned files appear to not have any extra whitespace.';
+$txt['diagnostics_whitespace_notfound'] = 'No files found with extra whitespace.';
 
 ?>
